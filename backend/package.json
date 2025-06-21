@@ -1,11 +1,12 @@
 {
   "scripts": {
-    "dev": "tsx -r dotenv/config --watch src/index.ts",
+    "dev": "tsx -r dotenv/config --watch src/server.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/node": "^24.0.3",
     "prisma": "^6.10.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
@@ -13,6 +14,7 @@
   "dependencies": {
     "@prisma/client": "^6.10.0",
     "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "zod": "^3.25.67"
   }
 }
