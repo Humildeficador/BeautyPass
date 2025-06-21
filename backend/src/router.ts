@@ -1,7 +1,10 @@
 import { Router } from "express";
+import authRouter from './routes/auth'
+import homeRouter from './routes/home'
 
-export const router = Router()
+const router = Router()
 
-router.get('/', (req, res) => {
-  res.send('API online 🚀')
-})
+router.use('/auth', authRouter)
+// router.use('/', homeRouter)
+
+export default router
