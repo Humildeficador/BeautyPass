@@ -1,24 +1,14 @@
-// import styles from './App.module.scss'
-import { useEffect } from 'react'
-import { api } from './api'
+import styles from './App.module.scss'
 import { LoginButton } from './components/LoginButton'
+import { PrivateRoute } from './components/PrivateRoute'
 
 export function App() {
-
-  const teste = async () => {
-    const data = await api.post('/', (req, res) => {
-      return res
-    })
-    console.log(data)
-  }
-
-  useEffect(() => {
-    teste()
-  }, [])
-
   return (
-    <>
-      <LoginButton />
-    </>
+    <div className={styles.container}>
+      <div className={styles.loginGoogleButton}>
+        <LoginButton />
+        <PrivateRoute />
+      </div>
+    </div>
   )
 }

@@ -1,5 +1,5 @@
-import { GoogleLogin } from "@react-oauth/google"
-import { loginWithGoogle } from "../api/auth"
+import { GoogleLogin } from '@react-oauth/google'
+import { loginWithGoogle } from '../api/auth'
 
 export const LoginButton = () => {
   return (
