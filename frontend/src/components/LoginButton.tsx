@@ -1,14 +1,28 @@
 import { GoogleLogin } from '@react-oauth/google'
 import { loginWithGoogle } from '../api/auth'
+import { useAuth } from '../context/AuthContext'
+import { PrivateRoute } from './PrivateRoute'
 
 export const LoginButton = () => {
+  const { login, isLoggedIn, logout } = useAuth()
+
+  if (isLoggedIn) {
+    return (
+      <>
+        <p>Você já está logado!</p>
+        <button onClick={logout}>Deslogar</button>
+        <PrivateRoute />
+      </>
+    )
+  }
+
   return (
     <GoogleLogin
       onSuccess={async (credentialResponse) => {
         if (credentialResponse.credential) {
           try {
-            const user = await loginWithGoogle(credentialResponse.credential)
-            console.log('Usuário validado pelo backend:', user)
+            const data = await loginWithGoogle(credentialResponse.credential)
+            login(data.user, data.token)
           } catch (error) {
             console.error('Erro ao logar:', error)
           }

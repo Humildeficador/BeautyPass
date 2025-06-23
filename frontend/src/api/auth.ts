@@ -1,10 +1,10 @@
 import { api } from './index'
+import { loginResponseSchema } from '../schemas/loginResponse'
 
 export const loginWithGoogle = async (credential: string) => {
-  const { data } = await api.post('/auth/google/callback', { token: credential })
-  const { token, user } = data
+  const res = await api.post('/auth/google/callback', { token: credential })
 
-  localStorage.setItem('token', token)
+  const data = loginResponseSchema.parse(res.data)
 
-  return user
+  return data
 }
