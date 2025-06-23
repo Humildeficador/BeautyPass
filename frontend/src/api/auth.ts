@@ -6,5 +6,6 @@ export const loginWithGoogle = async (credential: string) => {
 
   const data = loginResponseSchema.parse(res.data)
 
+  console.log(data)
   return data
 }
