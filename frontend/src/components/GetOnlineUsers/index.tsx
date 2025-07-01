@@ -7,7 +7,7 @@ export const GetOnlineUsers = () => {
     <div>
       {onlineUsers &&
         onlineUsers.map((user) => (
-          <div key={user.userId}>{user.userInfo.firstName}</div>
+          <div key={user.userId}>{user.userInfo.firstName + ' ' + user.userInfo.lastName}</div>
         ))}
     </div>
   )
