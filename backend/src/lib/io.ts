@@ -1,7 +1,7 @@
 import { Server } from 'socket.io'
 import jwt from 'jsonwebtoken'
 import { server } from '../server'
-import { addUserSocket, removeUserSocket } from '../utils/onlineUsers'
+import { addUserSocket, getOnlineUserList, removeUserSocket } from '../utils/onlineUsers'
 
 const runIo = () => {
   const io = new Server(server, {
@@ -31,11 +31,19 @@ const runIo = () => {
   io.on('connection', (socket) => {
     const user = socket.data.user
     const userId = user.sub
+    const firstName = user.firstName
+    const lastName = user.lastName
 
-    addUserSocket(userId, socket.id)
+
+    console.log('📡 Nova conexão de:', userId, socket.id)
+
+    addUserSocket(userId, { firstName, lastName }, socket.id)
+
+    io.emit('online-users', getOnlineUserList())
 
     socket.on('disconnect', () => {
       removeUserSocket(userId, socket.id)
+      io.emit('online-users', getOnlineUserList())
     })
   })
 }

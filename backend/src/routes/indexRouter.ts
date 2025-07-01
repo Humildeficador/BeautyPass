@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { authenticates } from "../middlewares/autheticates"
-import { getOnlineUserId } from "../utils/onlineUsers"
+import { getOnlineUserList } from "../utils/onlineUsers"
 
 const router = Router()
 
@@ -12,8 +12,8 @@ router.get('/private', authenticates, (req, res) => {
   res.status(200).json({ message: "Deu certinho!", user: req.user })
 })
 
-router.get('online-users', authenticates, (req, res) => {
-  res.json({ online: getOnlineUserId() })
+router.get('/online-users', authenticates, (req, res) => {
+  res.status(200).json({ online: getOnlineUserList() })
 })
 
 export default router
