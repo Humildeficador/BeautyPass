@@ -6,8 +6,6 @@ import { prisma } from "../lib/prisma"
 import { authenticates } from "../middlewares/autheticates"
 
 const router = Router()
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
-const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
 
 router.post('/google/callback', async (req, res) => {
   const { token } = req.body
@@ -18,11 +16,13 @@ router.post('/google/callback', async (req, res) => {
   }
 
   try {
+    const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID
     })
 
+    const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
     const payload = ticket.getPayload()
 
     if (!payload || !payload.email) {

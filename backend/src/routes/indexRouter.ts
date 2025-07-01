@@ -1,6 +1,6 @@
 import { Router } from "express"
 import { authenticates } from "../middlewares/autheticates"
-import { getOnlineUserList } from "../utils/onlineUsers"
+import { getOnlineUserList } from "../socket/utils/userSessions"
 
 const router = Router()
 

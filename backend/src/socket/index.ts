@@ -1,8 +1,10 @@
 import { Server } from 'socket.io'
-import jwt from 'jsonwebtoken'
 import { server } from '../server'
-import { addUserSocket, getOnlineUserList, removeUserSocket } from '../utils/onlineUsers'
+import { setupHandlers } from './handlers'
+import { socketAuthMiddleware } from './middleware/auth'
+import { addUserSocket, getOnlineUsers, removeUserSocket } from './utils/userSessions'
 
+/* Cria a instancia do server do socket, usa o middleware e atualiza a lista de usuarios online  (./utils/userSessions) */
 export const setupSocket = () => {
   const io = new Server(server, {
     cors: {
@@ -10,36 +12,22 @@ export const setupSocket = () => {
     }
   })
 
-  const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
-
-  io.use((socket, next) => {
-    const token: string = socket.handshake.auth.token
-
-    if (!token) {
-      return next(new Error('Token ausente!'))
-    }
-
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET)
-      socket.data.user = decoded
-      next()
-    } catch (err) {
-      return next(new Error('Token inválido!'))
-    }
-  })
+  io.use(socketAuthMiddleware)
 
   io.on('connection', (socket) => {
     const { sub: userId, firstName, lastName } = socket.data.user
 
-    console.log('📡 Nova conexão de:', userId, socket.id)
-
     addUserSocket(userId, { firstName, lastName }, socket.id)
 
-    io.emit('online-users', getOnlineUserList())
+    setupHandlers(io, socket)
+
+    io.emit('online-users', getOnlineUsers())
 
     socket.on('disconnect', () => {
       removeUserSocket(userId, socket.id)
-      io.emit('online-users', getOnlineUserList())
+      io.emit('online-users', getOnlineUsers())
     })
   })
+
+  return io
 }
