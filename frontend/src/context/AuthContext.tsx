@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { tokenSchema, userSchema, type tokenPublic, type userPublic } from '../schemas/loginResponse'
 import { api } from '../api'
+import { connectSocket, getSocket } from '../lib/io'
 
 type AuthContextType = {
   user: userPublic | null
@@ -57,6 +58,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     localStorage.setItem('user', JSON.stringify(newUser))
     localStorage.setItem('token', newToken)
+
+    connectSocket(newToken)
   }
 
   const logout = () => {
@@ -64,6 +67,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setToken(null)
     localStorage.removeItem('user')
     localStorage.removeItem('token')
+    getSocket()?.disconnect()
   }
 
   return (
