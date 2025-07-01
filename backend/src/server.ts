@@ -1,10 +1,10 @@
 import { app } from './app'
 import { createServer } from 'node:http'
-import { runIo } from './lib/io'
+import { setupSocket } from './socket'
 
 export const server = createServer(app)
 
-runIo()
+setupSocket()
 
 // Código antigo comentado por segurança
 

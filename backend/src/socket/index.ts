@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { server } from '../server'
 import { addUserSocket, getOnlineUserList, removeUserSocket } from '../utils/onlineUsers'
 
-const runIo = () => {
+export const setupSocket = () => {
   const io = new Server(server, {
     cors: {
       origin: '*'
@@ -43,5 +43,3 @@ const runIo = () => {
     })
   })
 }
-
-export { runIo }
