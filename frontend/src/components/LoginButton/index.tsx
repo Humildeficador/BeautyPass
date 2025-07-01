@@ -30,6 +30,9 @@ export const LoginButton = () => {
           }
         }
       }}
+      auto_select={true}
+      theme='filled_black'
+      shape='circle'
     />
   )
 }
