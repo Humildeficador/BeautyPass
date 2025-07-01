@@ -10,7 +10,9 @@ export function App() {
     <div className={styles.container}>
       <div className={styles.loginGoogleButton}>
         <LoginButton />
-        {!isLoggedIn ? <ButtonToPrivateRoute /> : ''}
+        {!isLoggedIn &&
+          <ButtonToPrivateRoute />
+        }
       </div>
     </div>
   )
