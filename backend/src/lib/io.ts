@@ -29,11 +29,7 @@ const runIo = () => {
   })
 
   io.on('connection', (socket) => {
-    const user = socket.data.user
-    const userId = user.sub
-    const firstName = user.firstName
-    const lastName = user.lastName
-
+    const { sub: userId, firstName, lastName } = socket.data.user
 
     console.log('📡 Nova conexão de:', userId, socket.id)
 
