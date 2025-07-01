@@ -64,7 +64,7 @@ router.post('/google/callback', async (req, res) => {
         expiresIn: '7d'
       }
     )
-    console.log(user)
+
     res.status(200).json({ token: appToken, user })
     return
   } catch (error) {

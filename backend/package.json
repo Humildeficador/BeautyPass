@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "tsx -r dotenv/config --watch src/server.ts",
+    "dev": "tsx -r dotenv/config --watch src/main.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -20,6 +20,7 @@
     "express": "^5.1.0",
     "google-auth-library": "^10.1.0",
     "jsonwebtoken": "^9.0.2",
+    "socket.io": "^4.8.1",
     "uid": "^2.0.2",
     "zod": "^3.25.67"
   }
