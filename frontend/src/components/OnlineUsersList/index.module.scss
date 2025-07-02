@@ -1,0 +1,15 @@
+.container {
+  max-width: 350px;
+  min-width: 250px;
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+
+  padding: .35rem 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.171);
+  border-radius: 8px;
+}

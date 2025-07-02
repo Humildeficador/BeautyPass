@@ -1,22 +1,9 @@
 import { GoogleLogin } from '@react-oauth/google'
 import { loginWithGoogle } from '../../api/auth'
 import { useAuth } from '../../context/AuthContext'
-import { ButtonToPrivateRoute } from '../ButtonToPrivateRoute'
-import { GetOnlineUsers } from '../GetOnlineUsers'
 
 export const LoginButton = () => {
-  const { login, isLoggedIn, logout } = useAuth()
-
-  if (isLoggedIn) {
-    return (
-      <>
-        <p>Você já está logado!</p>
-        <button onClick={logout}>Deslogar</button>
-        <ButtonToPrivateRoute />
-        <GetOnlineUsers />
-      </>
-    )
-  }
+  const { login } = useAuth()
 
   return (
     <GoogleLogin
