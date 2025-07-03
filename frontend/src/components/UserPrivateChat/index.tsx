@@ -1,7 +1,6 @@
 import { useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import type { UserSocketInfo } from '../../types/userSocket'
 import { ChatContainer } from './index.style'
-import { useHandleUserMessages } from '../../hooks/useHandleUserMessages'
 import { useChat } from '../../context/ChatContext'
 
 type Props = {
@@ -9,9 +8,8 @@ type Props = {
 }
 
 export const UserPrivateChat = ({ userSocketInfo }: Props) => {
-  const { messages } = useChat()
   const [message, setMessage] = useState('')
-  const { userSendMessage } = useHandleUserMessages()
+  const { sendMessage } = useChat()
 
   const handleUserMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(() => e.target.value)
@@ -19,7 +17,7 @@ export const UserPrivateChat = ({ userSocketInfo }: Props) => {
 
   const handleSendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key !== 'Enter') return
-    userSendMessage(userSocketInfo, message)
+    sendMessage(userSocketInfo.userId, message)
     setMessage('')
   }
   return (

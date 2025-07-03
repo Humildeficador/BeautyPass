@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
 import { userSchema, type tokenPublic, type userPublic } from '../schemas/loginResponse'
-import { connectSocket } from '../services/socket'
+import { initSocket } from '../services/socket'
 import { api } from '../api'
 import { loadSession, saveSession } from '../utils/authStorage'
 
@@ -35,7 +35,7 @@ export const useRestoreSession = ({ setUser, setToken, logout }: Params) => {
 
         saveSession(validatedUser, parsedToken)
 
-        connectSocket(parsedToken)
+        initSocket(parsedToken)
       }
 
       catch {

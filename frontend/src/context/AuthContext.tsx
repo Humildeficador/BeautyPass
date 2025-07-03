@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { type tokenPublic, type userPublic } from '../schemas/loginResponse'
-import { connectSocket, disconnectSocket } from '../services/socket'
+import { initSocket, disconnectSocket } from '../services/socket'
 import { useRestoreSession } from '../hooks/useRestoreSession'
 import { clearSession, saveSession } from '../utils/authStorage'
 
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     saveSession(newUser, newToken)
 
-    connectSocket(newToken)
+    initSocket(newToken)
   }
 
   const logout = () => {

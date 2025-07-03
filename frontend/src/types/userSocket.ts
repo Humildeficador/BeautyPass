@@ -9,12 +9,10 @@ export type UserSocketInfo = {
 }
 
 export type MessageInfo = {
-  message: string
   from: {
     firstName: string
     lastName: string
     sub: string
   }
-  timestamp: number
-  formatedDate?: string
+  content: string
 }

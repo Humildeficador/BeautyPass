@@ -2,8 +2,7 @@ import { io, Socket } from 'socket.io-client'
 
 let socket: Socket | null = null
 
-export const connectSocket = (token: string): Socket => {
-
+export const initSocket = (token: string): Socket => {
   if (socket && socket.connected) return socket
 
   socket = io(import.meta.env.VITE_API_BASE_URL, {
@@ -17,7 +16,7 @@ export const connectSocket = (token: string): Socket => {
   })
 
   socket.on('disconnect', () => {
-    console.log('❌ Desconectado')
+    console.warn('❌ Desconectado')
   })
 
   return socket
@@ -30,4 +29,9 @@ export const disconnectSocket = () => {
   }
 }
 
-export const getSocket = () => socket
+export const socketInstance = (): Socket => {
+  if (!socket) {
+    throw new Error('Socket ainda não foi inicializado, inicie com o initToken(token) primeiramente.')
+  }
+  return socket
+} 

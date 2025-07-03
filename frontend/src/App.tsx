@@ -1,4 +1,5 @@
 import styles from './App.module.scss'
+import { Chat } from './components/Chat'
 import { LoginButton } from './components/LoginButton'
 import { OnlineUsersList } from './components/OnlineUsersList'
 import { useAuth } from './context/AuthContext'
@@ -14,6 +15,7 @@ export function App() {
         <button onClick={logout} className={styles.logout}>X</button>
         <ChatProvider>
           <OnlineUsersList />
+          <Chat />
         </ChatProvider>
       </div>
     )

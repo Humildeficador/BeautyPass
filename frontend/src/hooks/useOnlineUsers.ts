@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
-import { getSocket } from '../services/socket'
+import { socketInstance } from '../services/socket'
 import type { UserSocketInfo } from '../types/userSocket'
 
 export const useOnlineUsers = () => {
   const [onlineUsers, setOnlineUsers] = useState<UserSocketInfo[]>()
   useEffect(() => {
-    const socket = getSocket()
-
-    if (!socket) return
+    const socket = socketInstance()
 
     const handleOnlineUsers = (users: UserSocketInfo[]) => {
       setOnlineUsers(users)

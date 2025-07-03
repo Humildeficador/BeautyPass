@@ -1,48 +1,58 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from 'react'
-import { getSocket } from '../services/socket'
+import { socketInstance } from '../services/socket'
 
 type Message = {
-  from: string
-  to: string
+  id: string
+  conversationId: string
+  senderId: string
   content: string
-  timestamp: number
+  createdAt: string
 }
 
 type MessagesMap = Record<string, Message[]>
 
 
 interface ChatContextType {
-  messages: MessagesMap
+  conversations: MessagesMap
   sendMessage: (to: string, content: string) => void
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
-  const [messages, setMessages] = useState<MessagesMap>({})
-
+  const [conversations, setConversations] = useState<MessagesMap>({})
+  const socket = socketInstance()
 
   useEffect(() => {
-    const socket = getSocket()
-    if (!socket) return
-    socket.on('private-message', (msg: Message) => {
-      setMessages(prev => ({
+    const handleMessage = (message: Message) => {
+      setConversations(prev => ({
         ...prev,
-        [msg.from]: [...(prev[msg.from] || []), msg]
+        [message.conversationId]: [
+          ...(prev[message.conversationId] || []),
+          message
+        ]
       }))
-    })
+    }
+
+    socket.on('new-private-message', handleMessage)
 
     return () => {
-      socket.off('private-message')
+      socket.off('new-private-message', handleMessage)
     }
   }, [])
 
   const sendMessage = (to: string, content: string) => {
-    console.log(to, content)
+    const messageInfo = {
+      to,
+      content,
+    }
+    socket.emit('send-private-message', messageInfo)
   }
 
   return (
-    <ChatContext.Provider value={{ messages, sendMessage }}>
+    <ChatContext.Provider value={{ sendMessage, conversations }}>
       {children}
     </ChatContext.Provider>
   )
