@@ -57,7 +57,8 @@ router.post('/google/callback', async (req, res) => {
         sub: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email
+        email: user.email,
+        avatarUrl: user.avatarUrl
       },
       JWT_SECRET,
       {

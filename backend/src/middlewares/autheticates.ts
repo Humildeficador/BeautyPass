@@ -24,7 +24,6 @@ export async function authenticates(req: Request, res: Response, next: NextFunct
   try {
     const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
     const decoded = jwt.verify(token, JWT_SECRET) as JwtUserPayload
-
     const user = await prisma.user.findUnique({
       where: {
         id: decoded.sub
@@ -36,7 +35,12 @@ export async function authenticates(req: Request, res: Response, next: NextFunct
       return
     }
 
-    req.user = { id: user.id, name: `${user.firstName} ${user.lastName}` }
+    req.user = {
+      id: user.id,
+      name: `${user.firstName} ${user.lastName}`,
+      avatarUrl: user.avatarUrl
+    }
+
     next()
   } catch (error) {
     res.status(401).json({ error: 'Token inválido' })

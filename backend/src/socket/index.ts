@@ -15,18 +15,16 @@ export const setupSocket = () => {
   io.use(socketAuthMiddleware)
 
   io.on('connection', (socket) => {
-    const { sub: userId, firstName, lastName } = socket.data.user
+    const {
+      sub: userId,
+      firstName,
+      lastName,
+      avatarUrl
+    } = socket.data.user
 
-    addUserSocket(userId, { firstName, lastName }, socket.id)
+    addUserSocket(userId, { firstName, lastName, avatarUrl }, socket.id)
 
     setupHandlers(io, socket)
-
-    io.emit('online-users', getOnlineUsers())
-
-    socket.on('disconnect', () => {
-      removeUserSocket(userId, socket.id)
-      io.emit('online-users', getOnlineUsers())
-    })
   })
 
   return io

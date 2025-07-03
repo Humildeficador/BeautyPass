@@ -1,6 +1,7 @@
 export type UserInfo = {
   firstName: string
   lastName: string
+  avatarUrl: string
 }
 
 export type UserSession = {
@@ -20,7 +21,11 @@ const userSessions = new Map<string, UserSession>()
 /* Adiciona uma conexão/socket para o usuario */
 export const addUserSocket = (
   userId: string,
-  userInfo: { firstName: string, lastName: string },
+  userInfo: {
+    firstName: string,
+    lastName: string,
+    avatarUrl: string
+  },
   socketId: string
 ) => {
   if (!userSessions.has(userId)) {
