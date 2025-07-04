@@ -2,7 +2,7 @@ import { GoogleLogin } from '@react-oauth/google'
 import { loginWithGoogle } from '../../api/auth'
 import { useAuth } from '../../context/AuthContext'
 
-export const LoginButton = () => {
+export const GoogleLoginButton = () => {
   const { login } = useAuth()
 
   return (

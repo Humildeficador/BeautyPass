@@ -1,30 +1,24 @@
+import { useEffect } from 'react'
 import styles from './App.module.scss'
-import { Chat } from './components/Chat'
-import { LoginButton } from './components/LoginButton'
-import { OnlineUsersList } from './components/OnlineUsersList'
+import { GoogleLoginButton } from './components/LoginButton'
 import { useAuth } from './context/AuthContext'
-import { ChatProvider } from './context/ChatContext'
+import { useNavigate } from 'react-router'
 
 
 export function App() {
-  const { isLoggedIn, logout } = useAuth()
+  const { isLoggedIn } = useAuth()
+  const navigate = useNavigate()
 
-  if (isLoggedIn) {
-    return (
-      <div className={styles.container}>
-        <button onClick={logout} className={styles.logout}>X</button>
-        <ChatProvider>
-          <OnlineUsersList />
-          <Chat />
-        </ChatProvider>
-      </div>
-    )
-  }
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/home')
+    }
+  }, [isLoggedIn, navigate])
 
   return (
     <div className={styles.container}>
       <div className={styles.loginGoogleButton}>
-        <LoginButton />
+        <GoogleLoginButton />
       </div>
     </div>
   )

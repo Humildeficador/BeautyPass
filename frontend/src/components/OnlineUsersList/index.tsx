@@ -1,4 +1,3 @@
-
 import { useOnlineUsers } from '../../hooks/useOnlineUsers'
 import { OnlineUserItem } from './OnlineUserItem'
 import styles from './index.module.scss'
@@ -11,7 +10,7 @@ export const OnlineUsersList = () => {
       <div className={styles.userList}>
         {onlineUsers &&
           onlineUsers.map((user) => (
-            <OnlineUserItem user={user} key={user.userInfo.firstName} />
+            <OnlineUserItem user={user} key={user.userId} />
           ))}
       </div>
     </div>

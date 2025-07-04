@@ -9,15 +9,19 @@ type Params = {
   setUser: (user: userPublic) => void
   setToken: (user: tokenPublic) => void
   logout: () => void
+  onFinish?: () => void
 }
 
-export const useRestoreSession = ({ setUser, setToken, logout }: Params) => {
+export const useRestoreSession = ({ setUser, setToken, logout, onFinish }: Params) => {
   useEffect(() => {
     const restore = async () => {
+      const session = loadSession()
 
-      const session = loadSession()!
-
-      if (!session) return logout()
+      if (!session) {
+        logout()
+        onFinish?.()
+        return
+      }
 
       const { parsedToken } = session
 
@@ -40,6 +44,8 @@ export const useRestoreSession = ({ setUser, setToken, logout }: Params) => {
 
       catch {
         logout()
+      } finally {
+        onFinish?.()
       }
     }
 

@@ -3,8 +3,9 @@ import { socketInstance } from '../services/socket'
 import type { UserSocketInfo } from '../types/userSocket'
 
 export const useOnlineUsers = () => {
-  const [onlineUsers, setOnlineUsers] = useState<UserSocketInfo[]>()
+  const [onlineUsers, setOnlineUsers] = useState<UserSocketInfo[]>([])
   useEffect(() => {
+
     const socket = socketInstance()
 
     const handleOnlineUsers = (users: UserSocketInfo[]) => {

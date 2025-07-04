@@ -17,6 +17,7 @@ const AuthContext = createContext<AuthContextType | null>(null)
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<userPublic | null>(null)
   const [token, setToken] = useState<tokenPublic | null>(null)
+  const [loading, setLoading] = useState(true)
 
   const login = (newUser: userPublic, newToken: tokenPublic) => {
     setUser(newUser)
@@ -30,19 +31,25 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     setUser(null)
     setToken(null)
-    
+
     clearSession()
 
     disconnectSocket()
   }
 
-  useRestoreSession({ setUser, setToken, logout })
+  useRestoreSession({
+    setUser,
+    setToken,
+    logout,
+    onFinish: () => setLoading(false)
+  })
+
 
   return (
     <AuthContext.Provider value={
       { user, token, isLoggedIn: !!token, login, logout }
     }>
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   )
 }
