@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "tunnel": "lt --port 5173 --subdomain beautyjoao",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "fix": "eslint . --fix",
@@ -32,6 +33,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "localtunnel": "^2.0.2",
     "sass": "^1.89.2",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
