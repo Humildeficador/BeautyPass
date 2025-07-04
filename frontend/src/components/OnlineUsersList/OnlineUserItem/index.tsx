@@ -1,14 +1,13 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import type { UserSocketInfo } from '../../../types/userSocket'
 import { UserPrivateChat } from '../../UserPrivateChat'
 import { UserContainer, Username, UserProfilePicture } from './index.style'
 
 type Props = {
   user: UserSocketInfo
-  children?: React.ReactNode
 }
 
-export const OnlineUserItem = ({ user }: Props) => {
+export const OnlineUserItem = React.memo(({ user }: Props) => {
   const [isChatOpen, setIsChatOpen] = useState(false)
 
   const isOnlineUser = (): boolean => {
@@ -36,4 +35,4 @@ export const OnlineUserItem = ({ user }: Props) => {
       }
     </>
   )
-}
+})
