@@ -33,3 +33,6 @@ build/
 *.njsproj
 *.sln
 *.sw?
+
+generated/prisma
+*tunnel.ts
