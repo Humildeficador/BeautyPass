@@ -12,7 +12,7 @@ export const userSendMessage = (io: Server, socket: Socket) => {
     try {
       const from: string = socket.data.user.sub
 
-      if (to === socket.data.user.sub) throw new Error('Cabaço, não manda msg pra sí mesmo')
+      if (to === socket.data.user.sub) throw new Error('Cabaço, não manda msg pra sí mesmo, carente do caralho')
 
       const conversation = await prisma.conversation.findFirst({
         where: {
@@ -45,7 +45,7 @@ export const userSendMessage = (io: Server, socket: Socket) => {
         }
       })
 
-      io.to(to).emit('new-private-message', message)
+      io.to([to, socket.data.user.sub]).emit('new-private-message', message)
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message)

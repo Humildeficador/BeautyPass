@@ -24,7 +24,8 @@ export const addUserSocket = (
   userInfo: {
     firstName: string,
     lastName: string,
-    avatarUrl: string
+    avatarUrl: string,
+    conversationsId: { conversationId: string }[]
   },
   socketId: string
 ) => {

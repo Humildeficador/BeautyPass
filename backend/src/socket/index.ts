@@ -19,10 +19,11 @@ export const setupSocket = () => {
       sub: userId,
       firstName,
       lastName,
-      avatarUrl
+      avatarUrl,
+      conversationsId,
     } = socket.data.user
 
-    addUserSocket(userId, { firstName, lastName, avatarUrl }, socket.id)
+    addUserSocket(userId, { firstName, lastName, avatarUrl, conversationsId }, socket.id)
 
     setupHandlers(io, socket)
   })
