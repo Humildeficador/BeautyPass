@@ -75,7 +75,7 @@ router.post('/google/callback', async (req, res) => {
   }
 })
 
-router.get('/me', authenticates, async (req, res) => {
+router.get('/me', async (req, res) => {
   try {
     if (!req.user) {
       res.status(401).json({ error: 'Usuário não autenticado' })
