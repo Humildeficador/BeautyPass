@@ -4,6 +4,7 @@ export type UserSocketInfo = {
     firstName: string
     lastName: string
     avatarUrl: string
+    conversationsId: { conversationId: string }[]
   }
   sockets: string[]
 }
