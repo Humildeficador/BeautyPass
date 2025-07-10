@@ -13,20 +13,17 @@ export const OnlineUserItem = React.memo(({
   handleChatUserInfo
 }: Props) => {
   return (
-    <>
-      <UserContainer onClick={() => {
-        handleChatUserInfo(user)
-      }}>
-        <UserProfilePicture
-          src={user.userInfo.avatarUrl}
-          alt={`${user.userInfo.firstName} Avatar`}
-          $isOnlineUser={true}
-        />
-        <Username>
-          {`${user.userInfo.firstName} ${user.userInfo.lastName}`}
-        </Username>
-      </UserContainer>
-
-    </>
+    <UserContainer onClick={() => {
+      handleChatUserInfo(user)
+    }}>
+      <UserProfilePicture
+        src={user.userInfo.avatarUrl}
+        alt={`${user.userInfo.firstName} Avatar`}
+        $isOnlineUser={true}
+      />
+      <Username>
+        {`${user.userInfo.firstName} ${user.userInfo.lastName}`}
+      </Username>
+    </UserContainer>
   )
 })

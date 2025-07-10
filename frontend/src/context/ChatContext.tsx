@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from 'react'
 import { socketInstance } from '../services/socket'
+import { api } from '../api'
 
 export type Message = {
   id: string
@@ -10,10 +11,18 @@ export type Message = {
   createdAt: string
 }
 
+type Conversation = {
+  id: string
+  participants: {
+    userId: string
+  }[]
+}
+
 type MessagesMap = Record<string, Message[]>
 
 interface ChatContextType {
   conversations: MessagesMap
+  getConversations: () => Promise<Conversation[]> | []
   sendMessage: (to: string, content: string) => void
 }
 
@@ -21,6 +30,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversations, setConversations] = useState<MessagesMap>({})
+  const [, setConversationsId] = useState<Conversation[]>([])
   const socket = socketInstance()
 
   useEffect(() => {
@@ -49,8 +59,32 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     socket.emit('send-private-message', messageInfo)
   }
 
+  const getConversations = async () => {
+    try {
+      const { data } = await api.get<Conversation[]>('/chat/conversations')
+      setConversationsId(() => [...data])
+      return data
+    } catch (err) {
+      console.error(err)
+      return []
+    }
+  }
+
+  const getConversation = async ([firstUserId, secondUserId]: string[]) => {
+    try {
+      const { data } = await api.get(`/chat/conversations/${firstUserId}/${secondUserId}`)
+      return data
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
-    <ChatContext.Provider value={{ sendMessage, conversations }}>
+    <ChatContext.Provider value={{
+      sendMessage,
+      conversations,
+      getConversations
+    }}>
       {children}
     </ChatContext.Provider>
   )

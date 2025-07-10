@@ -10,20 +10,20 @@ import { PrivateRoute } from './components/PrivateRoute/PrivateRoute.tsx'
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
 createRoot(document.getElementById('root')!).render(
+  // <StrictMode>
   <GoogleOAuthProvider clientId={CLIENT_ID}>
-    <StrictMode>
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<App />} />
-            <Route path='/home' element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            } />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </StrictMode>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<App />} />
+          <Route path='/home' element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          } />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </GoogleOAuthProvider>
+  // </StrictMode>
 )
