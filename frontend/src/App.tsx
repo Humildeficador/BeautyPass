@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import styles from './App.module.scss'
-import { GoogleLoginButton } from './components/LoginButton'
+import { GoogleLoginButton } from './components/GoogleLoginButton/GoogleLoginButton'
 import { useAuth } from './context/AuthContext'
 import { useNavigate } from 'react-router'
 
