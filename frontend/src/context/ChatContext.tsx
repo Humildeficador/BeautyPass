@@ -2,7 +2,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { socketInstance } from '../services/socket'
 
-type Message = {
+export type Message = {
   id: string
   conversationId: string
   senderId: string
@@ -11,7 +11,6 @@ type Message = {
 }
 
 type MessagesMap = Record<string, Message[]>
-
 
 interface ChatContextType {
   conversations: MessagesMap
