@@ -52,10 +52,26 @@ router.get('/conversations/:to', async (req, res) => {
           }
         }
       },
-      include: { messages: true }
+      include: {
+        messages: {
+          orderBy: { createdAt: 'asc' }
+        }
+      }
     })
+      ?? await prisma.conversation.create({
+        data: {
+          participants: {
+            createMany: {
+              data: [
+                { userId: req.user.id },
+                { userId: to }
+              ]
+            }
+          }
+        }
+      })
+    console.log('requisição')
 
-    console.log(conversate)
     res.status(200).json(conversate)
   } catch (err) {
     console.error(err)
