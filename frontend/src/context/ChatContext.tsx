@@ -18,12 +18,19 @@ type Conversation = {
   }[]
 }
 
+export type ConversationMessages = {
+  id: string
+  messages: Message[]
+}
+
 type MessagesMap = Record<string, Message[]>
 
 interface ChatContextType {
   conversations: MessagesMap
-  getConversations: () => Promise<Conversation[]> | []
+  messageConversation: ConversationMessages | null
   sendMessage: (to: string, content: string) => void
+  getConversations: () => Promise<Conversation[]> | []
+  getMessageConversation: (to: string) => Promise<ConversationMessages | undefined>
 }
 
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
@@ -31,6 +38,7 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined)
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [conversations, setConversations] = useState<MessagesMap>({})
   const [, setConversationsId] = useState<Conversation[]>([])
+  const [messageConversation, setMessageConversation] = useState<ConversationMessages | null>(null)
   const socket = socketInstance()
 
   useEffect(() => {
@@ -70,9 +78,10 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const getConversation = async ([firstUserId, secondUserId]: string[]) => {
+  const getMessageConversation = async (to: string) => {
     try {
-      const { data } = await api.get(`/chat/conversations/${firstUserId}/${secondUserId}`)
+      const { data } = await api.get<ConversationMessages>(`/chat/conversations/${to}`)
+      setMessageConversation(data)
       return data
     } catch (err) {
       console.log(err)
@@ -83,7 +92,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     <ChatContext.Provider value={{
       sendMessage,
       conversations,
-      getConversations
+      getConversations,
+      getMessageConversation,
+      messageConversation
     }}>
       {children}
     </ChatContext.Provider>

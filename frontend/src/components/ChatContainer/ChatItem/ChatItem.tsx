@@ -1,5 +1,5 @@
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
-import { useChat } from '../../../context/ChatContext'
+import { useChat, type ConversationMessages } from '../../../context/ChatContext'
 import type { UserSocketInfo } from '../../../types/userSocket'
 
 type Props = {
@@ -11,8 +11,20 @@ type Props = {
 }
 
 export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
-  const { sendMessage } = useChat()
+  const { sendMessage, getMessageConversation } = useChat()
   const [message, setMessage] = useState<string>('')
+  const [messageConversation, setMessageConversation] = useState<ConversationMessages | undefined>(undefined)
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      const tempMessageConversation = await getMessageConversation(userChatInfo[0])
+      setMessageConversation(tempMessageConversation)
+    }
+    fetchConversations()
+  }, [])
+
+  console.log(messageConversation)
+
 
   const handleValueMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(() => e.target.value)
