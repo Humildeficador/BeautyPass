@@ -8,7 +8,7 @@ import { authenticates } from "./middlewares/autheticates";
 const router = Router()
 
 router.use('/', indexRouter)
-router.use('/auth', authenticates,authRouter)
+router.use('/auth', authRouter)
 router.use('/chat', authenticates, chatRouter)
 
 export default router
