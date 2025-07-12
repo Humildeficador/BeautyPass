@@ -1,5 +1,8 @@
 import { Router } from 'express'
-import { prisma } from '../lib/prisma'
+import { findUserByPublicId } from '../services/users/findUserByPublicId'
+import { createConversate } from '../services/conversations/createConversate'
+import { findConversationsByUserId } from '../services/conversations/findConversationsByUserId'
+import { findConversateByParticipants } from '../services/conversations/findConversateByParticipants'
 
 const router = Router()
 
@@ -10,71 +13,53 @@ router.get('/conversations', async (req, res) => {
       return
     }
 
-    const conversations = await prisma.conversation.findMany({
-      where: {
-        participants: {
-          some: {
-            userId: req.user.id
-          }
-        }
-      },
-      include: {
-        participants: {
-          select: {
-            userId: true
-          }
-        }
-      }
-    })
+    const conversations = await findConversationsByUserId(req.user.id)
 
-    if (conversations) {
-      res.status(200).json(conversations)
+    if (!conversations) {
+      res.status(204)
+      return
     }
+    
+    res.status(200).json(conversations)
+    return
   } catch (error) {
     console.error(error)
+    return
   }
 })
 
-router.get('/conversations/:to', async (req, res) => {
-  const { to } = req.params
-
-  if (!req.user) {
-    res.status(401).json({ error: 'Usuário não autenticado' })
-    return
-  }
-
+router.get('/conversations/:targetPublicId', async (req, res) => {
   try {
-    const conversate = await prisma.conversation.findFirst({
-      where: {
-        participants: {
-          every: {
-            userId: { in: [req.user.id, to] }
-          }
-        }
-      },
-      include: {
-        messages: {
-          orderBy: { createdAt: 'asc' }
-        }
-      }
-    })
-      ?? await prisma.conversation.create({
-        data: {
-          participants: {
-            createMany: {
-              data: [
-                { userId: req.user.id },
-                { userId: to }
-              ]
-            }
-          }
-        }
-      })
-    console.log('requisição')
+    const { targetPublicId } = req.params
+
+    if (!req.user) {
+      res.status(401).json({ error: 'Usuário não autenticado' })
+      return
+    }
+
+    if (req.user.publicId === targetPublicId) {
+      res.status(501).json('Você não pode criar uma conversa consigo mesmo... AINDA')
+      return
+    }
+
+    const target = await findUserByPublicId(targetPublicId)
+
+    if (!target) {
+      res.status(404).json({ error: 'Usuário não encontrado' })
+      return
+    }
+
+    const conversate = await findConversateByParticipants(
+      { userId: req.user.id, targetId: target.id }
+    ) ?? await createConversate(
+      { userId: req.user.id, targetId: target.id }
+    )
 
     res.status(200).json(conversate)
+    return
   } catch (err) {
     console.error(err)
+    return
   }
 })
 

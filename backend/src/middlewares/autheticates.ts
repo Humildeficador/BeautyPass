@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from 'express'
 import jwt, { JwtPayload } from 'jsonwebtoken'
-import { prisma } from '../lib/prisma'
+import { Request, Response, NextFunction } from 'express'
+import { findUserByUserId } from '../services/users/findUserByUserId'
 
 interface JwtUserPayload extends JwtPayload {
   sub: string
@@ -13,22 +13,19 @@ interface JwtUserPayload extends JwtPayload {
  */
 
 export async function authenticates(req: Request, res: Response, next: NextFunction) {
-  const authHeader = req.headers.authorization
-  const token = authHeader?.split(' ')[1]
-
-  if (!token) {
-    res.status(401).json({ error: 'Token não fornecido' })
-    return
-  }
-
   try {
-    const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
+    const authHeader = req.headers.authorization
+    const token = authHeader?.split(' ')[1]
+
+    if (!token) {
+      res.status(401).json({ error: 'Token não fornecido' })
+      return
+    }
+
+    const JWT_SECRET = process.env.JWT_SECRET!
     const decoded = jwt.verify(token, JWT_SECRET) as JwtUserPayload
-    const user = await prisma.user.findUnique({
-      where: {
-        id: decoded.sub
-      }
-    })
+
+    const user = await findUserByUserId(decoded.sub)
 
     if (!user) {
       res.status(401).json({ error: 'Usuário não encontrado' })

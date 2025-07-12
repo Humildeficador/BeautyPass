@@ -28,7 +28,7 @@ model User {
   avatarUrl     String?
   createdAt     DateTime                   @default(now())
   updatedAt     DateTime                   @updatedAt
-  publicId      String                     @default(nanoid())
+  publicId      String                     @default(nanoid()) @unique
   provider      ProviderType               @default(NORMAL)
   Conversations ConversationParticipants[]
   Message       Message[]

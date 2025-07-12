@@ -1,28 +1,28 @@
-import { Router } from "express"
-import { OAuth2Client } from "google-auth-library"
 import jwt from 'jsonwebtoken'
-import { uid } from "uid"
-import { prisma } from "../lib/prisma"
-import { authenticates } from "../middlewares/autheticates"
+import { Router } from 'express'
+import { prisma } from '../lib/prisma'
+import { OAuth2Client } from 'google-auth-library'
+import { authenticates } from '../middlewares/autheticates'
+import { findOrCreateUser, ProviderType, UserInfo } from '../services/users/findOrCreateUser'
 
 const router = Router()
 
 router.post('/google/callback', async (req, res) => {
-  const { token } = req.body
-
-  if (!token) {
-    res.status(400).json({ error: 'Token ausente' })
-    return
-  }
-
   try {
+    const { token } = req.body
+
+    if (!token) {
+      res.status(400).json({ error: 'Token ausente' })
+      return
+    }
+
     const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
     const ticket = await client.verifyIdToken({
       idToken: token,
       audience: process.env.GOOGLE_CLIENT_ID
     })
 
-    const JWT_SECRET = process.env.JWT_SECRET || 'chaveSuperSecreta'
+    const JWT_SECRET = process.env.JWT_SECRET!
     const payload = ticket.getPayload()
 
     if (!payload || !payload.email) {
@@ -30,27 +30,15 @@ router.post('/google/callback', async (req, res) => {
       return
     }
 
-    let user = await prisma.user.findUnique({
-      where: {
-        email: payload.email
-      }
-    })
-
-    const createTempName = (email: string) => {
-      return email.split('@')[0] + '_' + uid()
+    const teste: UserInfo = {
+      avatarUrl: payload.picture,
+      email: payload.email,
+      firstName: payload.given_name,
+      lastName: payload.family_name || '',
+      provider: ProviderType.GOOGLE
     }
 
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          firstName: payload.given_name || createTempName(payload.email),
-          lastName: payload.family_name || '',
-          email: payload.email,
-          avatarUrl: payload.picture,
-          provider: 'GOOGLE'
-        }
-      })
-    }
+    const user = await findOrCreateUser(teste)
 
     const appToken = jwt.sign(
       {
@@ -58,7 +46,8 @@ router.post('/google/callback', async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        avatarUrl: user.avatarUrl
+        avatarUrl: user.avatarUrl,
+        publicId: user.publicId
       },
       JWT_SECRET,
       {
