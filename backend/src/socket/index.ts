@@ -2,11 +2,13 @@ import { Server } from 'socket.io'
 import { server } from '../server'
 import { setupHandlers } from './handlers'
 import { socketAuthMiddleware } from './middleware/auth'
-import { addUserSocket, getOnlineUsers, removeUserSocket } from './utils/userSessions'
+import { addOnlineUser } from './utils/onlineUsers'
 
-/* Cria a instancia do server do socket, usa o middleware e atualiza a lista de usuarios online  (./utils/userSessions) */
+let io: Server
+
+/* Cria a instancia do server do socket.io, usa o middleware e atualiza a lista de usuarios online  (./utils/userSessions) */
 export const setupSocket = () => {
-  const io = new Server(server, {
+  io = new Server(server, {
     cors: {
       origin: '*'
     }
@@ -16,17 +18,27 @@ export const setupSocket = () => {
 
   io.on('connection', (socket) => {
     const {
-      sub: userId,
       firstName,
       lastName,
       avatarUrl,
-      conversationsId,
+      publicId
     } = socket.data.user
 
-    addUserSocket(userId, { firstName, lastName, avatarUrl, conversationsId }, socket.id)
+    addOnlineUser({
+      publicId,
+      userInfo: { firstName, avatarUrl, lastName },
+      socketId: socket.id
+    })
 
     setupHandlers(io, socket)
   })
 
   return io
 }
+
+export const ioInstance = (): Server => {
+  if (!io) {
+    throw new Error('Io ainda não foi inicializado.')
+  }
+  return io
+} 
