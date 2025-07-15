@@ -18,7 +18,7 @@ export const MessageContainer = ({ messageConversation: { messages }, chatWith }
   return (
     <div className={styles.container}>
       <div className={styles.messageBox}>
-        {messages.map(({ content, id, createdAt, sender }) => (
+        {messages && messages.map(({ content, id, createdAt, sender }) => (
           sender.publicId !== chatWith ?
             <MessageFrom
               key={id}
