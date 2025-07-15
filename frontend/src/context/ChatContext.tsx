@@ -1,15 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, useContext, useEffect, useState } from 'react'
-import { socketInstance } from '../services/socket'
 import { api } from '../api'
-
-export type Message = {
-  id: string
-  conversationId: string
-  senderId: string
-  content: string
-  createdAt: string
-}
+import type { Message } from '../types/message'
+import { socketInstance } from '../services/socket'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 type Conversation = {
   id: string
@@ -36,28 +29,35 @@ interface ChatContextType {
 const ChatContext = createContext<ChatContextType | undefined>(undefined)
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
-  const [conversations, setConversations] = useState<MessagesMap>({})
-  const [, setConversationsId] = useState<Conversation[]>([])
-  const [messageConversation, setMessageConversation] = useState<ConversationMessages | null>(null)
   const socket = socketInstance()
+  const [, setConversationsId] = useState<Conversation[]>([])
+  const [conversations, setConversations] = useState<MessagesMap>({})
+  const [messageConversation, setMessageConversation] = useState<ConversationMessages | null>(null)
 
   useEffect(() => {
-    const handleMessage = (message: Message) => {
-      setConversations(prev => ({
-        ...prev,
-        [message.conversationId]: [
-          ...(prev[message.conversationId] || []),
-          message
-        ]
-      }))
-    }
-
     socket.on('new-private-message', handleMessage)
+
+    socket.on('message-notification', (
+      { conversationId, message }: { conversationId: string, message: Message }
+    ) => {
+      console.log(`Nova notificação\n${message.content}`)
+      socket.emit('join-conversation', conversationId)
+    })
 
     return () => {
       socket.off('new-private-message', handleMessage)
     }
   }, [])
+
+  const handleMessage = (message: Message) => {
+    setConversations(prev => ({
+      ...prev,
+      [message.conversationId]: [
+        ...(prev[message.conversationId] || []),
+        message
+      ]
+    }))
+  }
 
   const sendMessage = (to: string, content: string) => {
     const messageInfo = {
@@ -78,9 +78,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const getMessageConversation = async (to: string) => {
+  const getMessageConversation = async (publicId: string) => {
     try {
-      const { data } = await api.get<ConversationMessages>(`/chat/conversations/${to}`)
+      const { data } = await api.get<ConversationMessages>(`/chat/conversations/${publicId}`)
       setMessageConversation(data)
       return data
     } catch (err) {
