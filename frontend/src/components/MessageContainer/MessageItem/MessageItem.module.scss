@@ -1,0 +1,52 @@
+:root {
+  --royal-blue-50: #eef5ff;
+  --royal-blue-100: #e0ecff;
+  --royal-blue-200: #c6dbff;
+  --royal-blue-300: #a4c0fd;
+  --royal-blue-400: #7f9dfa;
+  --royal-blue-500: #546ff2;
+  --royal-blue-600: #4453e7;
+  --royal-blue-700: #3641cc;
+  --royal-blue-800: #2e38a5;
+  --royal-blue-900: #2d3782;
+  --royal-blue-950: #1a1e4c;
+}
+
+.container {
+  border-radius: .7rem;
+  padding: 0.5rem 0.75rem;
+  width: fit-content;
+  max-width: 80%;
+
+  &+& {
+    margin-top: 0.125rem;
+  }
+
+  &.from {
+    align-self: flex-end;
+    background-color: var(--royal-blue-500);
+  }
+
+  &.to {
+    background-color: var(--royal-blue-950);
+  }
+}
+
+.message {
+  display: inline;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  white-space: pre-wrap;
+}
+
+.timestamp {
+  float: right;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+
+  .time {
+    font-size: .7rem;
+    opacity: .75;
+    margin-top: .525rem;
+  }
+}
