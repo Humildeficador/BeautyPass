@@ -1,3 +1,4 @@
+import React from 'react'
 import styles from './MessageItem.module.scss'
 import { formatDate } from '../../../utils/formatDate'
 
@@ -11,7 +12,7 @@ type Props = {
   }
 }
 
-export const MessageFrom = ({ content, createdAt }: Props) => {
+export const MessageFrom = React.memo(({ content, createdAt }: Props) => {
   const date = formatDate(createdAt)
   return (
     <div className={`${styles.container} ${styles.from}`}>
@@ -23,9 +24,9 @@ export const MessageFrom = ({ content, createdAt }: Props) => {
       </span>
     </div>
   )
-}
+})
 
-export const MessageTo = ({ content, createdAt }: Props) => {
+export const MessageTo = React.memo(({ content, createdAt }: Props) => {
   const date = formatDate(createdAt)
   return (
     <div className={`${styles.container} ${styles.to}`}>
@@ -37,4 +38,4 @@ export const MessageTo = ({ content, createdAt }: Props) => {
       </span>
     </div>
   )
-}
+})

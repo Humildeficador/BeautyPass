@@ -2,6 +2,8 @@
 import { MessageContainer } from '../../MessageContainer/MessageContainer'
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import { useChat, type ConversationMessages } from '../../../context/ChatContext'
+import type { Message } from '../../../types/message'
+import { socketInstance } from '../../../services/socket'
 
 type Props = {
   handleCloseChat: (userId: string) => void
@@ -21,6 +23,8 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
   const [message, setMessage] = useState<string>('')
   const [messageConversation, setMessageConversation] = useState<ConversationMessages | undefined>(undefined)
 
+  const socket = socketInstance()
+
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -33,7 +37,20 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
       }
     }
     fetchConversations()
+
+    socket.on('message-submitted', handlerMessageConversation)
+    
+    return () => {
+      socket.off('message-submitted', handlerMessageConversation)
+    }
   }, [])
+
+  const handlerMessageConversation = (message: Message) => {
+    setMessageConversation((prev) => (prev && {
+      ...prev,
+      messages: [...prev.messages, message]
+    }))
+  }
 
   const handleValueMessage = (e: ChangeEvent<HTMLInputElement>) => {
     setMessage(() => e.target.value)

@@ -37,6 +37,8 @@ export const userSendMessage = (io: Server, socket: Socket) => {
         from
       })
 
+      io.to(socket.data.user.publicId).emit('message-submitted', message)
+
       io.to(to).emit('new-private-message', message)
       io.to(to).emit('message-notification', {
         conversationId: conversation.id,

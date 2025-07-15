@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styles from './MessageContainer.module.scss'
 import { MessageFrom, MessageTo } from './MessageItem/MessageItem'
 import type { ConversationMessages } from '../../context/ChatContext'
@@ -8,7 +8,7 @@ type Props = {
   chatWith: string
 }
 
-export const MessageContainer = ({ messageConversation: { messages }, chatWith }: Props) => {
+export const MessageContainer = React.memo(({ messageConversation: { messages }, chatWith }: Props) => {
   const endOfMessagesRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -38,4 +38,4 @@ export const MessageContainer = ({ messageConversation: { messages }, chatWith }
       </div>
     </div>
   )
-}
+})
