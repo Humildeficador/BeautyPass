@@ -1,11 +1,10 @@
-
-import { useOnlineUsers } from '../../context/OnlineUsersContext'
-import type { UserSocketInfo } from '../../types/userSocket'
-import { OnlineUserItem } from './OnlineUserItem/OnlineUserItem'
 import styles from './OnlineUserItem.module.scss'
+import type { OnlineUserInfo } from '../../types/user'
+import { OnlineUserItem } from './OnlineUserItem/OnlineUserItem'
+import { useOnlineUsers } from '../../context/OnlineUsersContext'
 
 type Props = {
-  handleChatUserInfo: (userSocketInfo: UserSocketInfo) => void
+  handleChatUserInfo: (onlineUserInfo: OnlineUserInfo) => void
 }
 
 export const OnlineUsersList = ({ handleChatUserInfo }: Props) => {
@@ -17,8 +16,8 @@ export const OnlineUsersList = ({ handleChatUserInfo }: Props) => {
         {onlineUsers &&
           onlineUsers.map((user) => (
             <OnlineUserItem
-              key={user.userId}
-              user={user}
+              key={user.publicId}
+              onlineUser={user}
               handleChatUserInfo={handleChatUserInfo}
             />
           ))}

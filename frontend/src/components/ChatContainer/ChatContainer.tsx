@@ -1,15 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react'
-import type { UserSocketInfo } from '../../types/userSocket'
 import { ChatItem } from './ChatItem/ChatItem'
 import { useChat } from '../../context/ChatContext'
-
-export type UserChatInfo = {
-  [userId: string]: {
-    userChatInfo: UserSocketInfo,
-    isChatOpen: boolean
-  }
-}
+import type { UserChatInfo } from '../../types/user'
 
 type Props = {
   handleCloseChat: (userId: string) => void

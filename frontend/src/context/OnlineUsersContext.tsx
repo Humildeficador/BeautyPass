@@ -1,20 +1,20 @@
-import { createContext, useContext, useEffect, useState } from 'react'
-import type { UserSocketInfo } from '../types/userSocket'
-import { socketInstance } from '../services/socket'
 import equal from 'fast-deep-equal'
+import type { OnlineUserInfo } from '../types/user'
+import { socketInstance } from '../services/socket'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-const OnlineUsersContext = createContext<UserSocketInfo[] | null>(null)
+const OnlineUsersContext = createContext<OnlineUserInfo[] | null>(null)
 
 export const OnlineUsersProvider = ({ children }: { children: React.ReactNode }) => {
-  const [onlineUsers, setOnlineUsers] = useState<UserSocketInfo[]>([])
+  const [onlineUsers, setOnlineUsers] = useState<OnlineUserInfo[]>([])
 
   useEffect(() => {
     const socket = socketInstance()
-    const handleOnlineUsers = (users: UserSocketInfo[]) => {
+    const handleOnlineUsers = (users: OnlineUserInfo[]) => {
       setOnlineUsers(prev => equal(prev, users) ? prev : users)
     }
 
-    socket.emit('request-online-users')
+    socket.emit('get-online-users')
     socket.on('online-users', handleOnlineUsers)
     return () => {
       socket.off('online-users', handleOnlineUsers)

@@ -1,28 +1,29 @@
 import React from 'react'
-import type { UserSocketInfo } from '../../../types/userSocket'
+import { preload } from 'react-dom'
+import type { OnlineUserInfo } from '../../../types/user'
 import { UserContainer, Username, UserProfilePicture } from './OnlineUserItem.style'
 
-
 type Props = {
-  user: UserSocketInfo
-  handleChatUserInfo: (userSocketInfo: UserSocketInfo) => void
+  onlineUser: OnlineUserInfo
+  handleChatUserInfo: (OnlineUserInfo: OnlineUserInfo) => void
 }
 
 export const OnlineUserItem = React.memo(({
-  user,
+  onlineUser,
   handleChatUserInfo
 }: Props) => {
+  preload(onlineUser.userInfo.avatarUrl, { as: 'image' })
   return (
     <UserContainer onClick={() => {
-      handleChatUserInfo(user)
+      handleChatUserInfo(onlineUser)
     }}>
       <UserProfilePicture
-        src={user.userInfo.avatarUrl}
-        alt={`${user.userInfo.firstName} Avatar`}
+        src={onlineUser.userInfo.avatarUrl}
+        alt={`${onlineUser.userInfo.firstName} Avatar`}
         $isOnlineUser={true}
       />
       <Username>
-        {`${user.userInfo.firstName} ${user.userInfo.lastName}`}
+        {`${onlineUser.userInfo.firstName} ${onlineUser.userInfo.lastName}`}
       </Username>
     </UserContainer>
   )

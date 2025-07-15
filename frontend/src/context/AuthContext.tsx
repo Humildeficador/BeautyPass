@@ -1,8 +1,8 @@
 import { createContext, useContext, useState } from 'react'
-import { type tokenPublic, type userPublic } from '../schemas/loginResponse'
-import { initSocket, disconnectSocket } from '../services/socket'
 import { useRestoreSession } from '../hooks/useRestoreSession'
 import { clearSession, saveSession } from '../utils/authStorage'
+import { initSocket, disconnectSocket } from '../services/socket'
+import { type tokenPublic, type userPublic } from '../schemas/loginResponse'
 
 type AuthContextType = {
   user: userPublic | null
@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) throw new Error('useAuth must be used inside AuthProvider')

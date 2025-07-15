@@ -1,36 +1,33 @@
 import { useState } from 'react'
 import { ChatProvider } from '../../context/ChatContext'
-import { OnlineUsersProvider } from '../../context/OnlineUsersContext'
-import type { UserSocketInfo } from '../../types/userSocket'
-import { OnlineUsersList } from '../OnlineUsersList/OnlineUsersList'
 import { ChatContainer } from '../ChatContainer/ChatContainer'
-
-export type UserChatInfo = {
-  [userId: string]: {
-    userChatInfo: UserSocketInfo,
-    isChatOpen: boolean
-  }
-}
+import { OnlineUsersList } from '../OnlineUsersList/OnlineUsersList'
+import type { OnlineUserInfo, UserChatInfo } from '../../types/user'
+import { OnlineUsersProvider } from '../../context/OnlineUsersContext'
 
 export const Users = () => {
-  const [usersChatInfo, setUsersChatInfo] = useState<UserChatInfo>({})
+  const [onlineUserInfo, setOnlineUserInfo] = useState<UserChatInfo>({})
 
-  const handleChatUserInfo = (userSocketInfo: UserSocketInfo) => {
-    setUsersChatInfo(prev => ({
+  const handleChatUserInfo = (onlineUserInfo: OnlineUserInfo) => {
+    setOnlineUserInfo(prev => ({
       ...prev,
-      [userSocketInfo.userId]: {
-        userChatInfo: userSocketInfo,
+      [onlineUserInfo.publicId]: {
+        userInfo: {
+          avatarUrl: onlineUserInfo.userInfo.avatarUrl,
+          firstName: onlineUserInfo.userInfo.firstName,
+          lastName: onlineUserInfo.userInfo.lastName
+        },
         isChatOpen: true
       }
     }))
   }
 
-  const handleCloseChat = (userId: string) => {
-    setUsersChatInfo(prev => ({
+  const handleCloseChat = (publicId: string) => {
+    setOnlineUserInfo(prev => ({
       ...prev,
-      [userId]: {
-        ...prev[userId],
-        isChatOpen: !prev[userId].isChatOpen
+      [publicId]: {
+        ...prev[publicId],
+        isChatOpen: !prev[publicId].isChatOpen
       }
     }))
   }
@@ -43,7 +40,7 @@ export const Users = () => {
       <ChatProvider>
         <ChatContainer
           handleCloseChat={handleCloseChat}
-          usersChatInfo={usersChatInfo}
+          usersChatInfo={onlineUserInfo}
         />
       </ChatProvider>
     </div>
