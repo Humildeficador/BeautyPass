@@ -16,23 +16,25 @@ export const findConversationsByUserId = async (userId: string) => {
             select: {
               publicId: true
             },
-          },
-          conversation: {
-            select: {
-              messages: {
-                take: 1,
-                select: {
-                  sender: {
-                    select: {
-                      firstName: true,
-                      lastName: true
-                    }
-                  }
-                }
-              }
-            }
           }
         }
+      },
+      messages: {
+        orderBy: {
+          createdAt: 'desc'
+        },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          sender: {
+            select: {
+              firstName: true,
+              lastName: true
+            }
+          }
+        },
+        take: 1 
       }
     }
   })

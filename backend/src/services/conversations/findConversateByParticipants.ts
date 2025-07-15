@@ -4,7 +4,7 @@ import { Participants } from '../../types/services/servicesTypes'
 export const findConversateByParticipants = async (
   { userId, targetId }: Participants
 ) => {
-  await prisma.conversation.findFirst({
+  return await prisma.conversation.findFirst({
     where: {
       participants: {
         every: {

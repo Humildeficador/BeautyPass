@@ -7,7 +7,7 @@ type Message = {
 }
 
 export const createMessage = async ({ conversationId, content, from }: Message) => {
-  await prisma.message.create({
+  return await prisma.message.create({
     data: {
       conversationId: conversationId,
       content: content,
