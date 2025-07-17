@@ -39,9 +39,11 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
     fetchConversations()
 
     socket.on('message-submitted', handlerMessageConversation)
-    
+    socket.on('new-private-message', handlerMessageConversation)
+
     return () => {
       socket.off('message-submitted', handlerMessageConversation)
+      socket.off('new-private-message', handlerMessageConversation)
     }
   }, [])
 
