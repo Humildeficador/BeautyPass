@@ -1,9 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import styles from './ChatItem.module.scss'
+import type { Message } from '../../../types/message'
+import { socketInstance } from '../../../services/socket'
 import { MessageContainer } from '../../MessageContainer/MessageContainer'
 import { useEffect, useState, type ChangeEvent, type KeyboardEvent } from 'react'
 import { useChat, type ConversationMessages } from '../../../context/ChatContext'
-import type { Message } from '../../../types/message'
-import { socketInstance } from '../../../services/socket'
+import { SendHorizontal, X } from 'lucide-react'
 
 type Props = {
   handleCloseChat: (userId: string) => void
@@ -54,12 +56,13 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
     }))
   }
 
-  const handleValueMessage = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleValueMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(() => e.target.value)
   }
 
-  const handleSendMessage = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key !== 'Enter' || message.trim() === '') return
+  const handleSendMessage = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key !== 'Enter' || message.trim() === '' || (e.key === 'Enter' && e.shiftKey)) return
+    console.log(e)
     sendMessage(userChatInfo[0], message)
     // if (messageConversation) sendMessage(messageConversation.id, message)
     setMessage('')
@@ -67,10 +70,28 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
 
   return (
     userChatInfo[1].isChatOpen &&
-    <div>
-      <button onClick={() => { handleCloseChat(userChatInfo[0]) }}>
-        FECHAR
-      </button>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div className={styles.userCard}>
+          <img
+            src={userChatInfo[1].userInfo.avatarUrl}
+            alt={userChatInfo[1].userInfo.firstName}
+            className={styles.userAvatar}
+          />
+          <span>
+            {userChatInfo[1].userInfo.firstName}
+            &nbsp;
+            {userChatInfo[1].userInfo.lastName}
+          </span>
+        </div>
+        <div className={styles.closeButton}>
+          <X
+            color='#a1a1a1'
+
+            onClick={() => { handleCloseChat(userChatInfo[0]) }}
+          />
+        </div>
+      </header>
       {
         isLoading ?
           <div>Messages is loading...</div> :
@@ -80,13 +101,17 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
             messageConversation={messageConversation}
           />
       }
-      <div>
-        <input
-          type='text'
+      <div className={styles.textBox}>
+        <textarea
+          className={styles.text}
           value={message}
           onChange={handleValueMessage}
           onKeyDown={handleSendMessage}
+          maxLength={2500}
         />
+        <div className={styles.sendButton}>
+          <SendHorizontal />
+        </div>
       </div>
     </div>
   )

@@ -1,9 +1,23 @@
 :root {
   --royal-blue-200: #c6dbff;
+
+  --ebony-50: #ecf4ff;
+  --ebony-100: #dceaff;
+  --ebony-200: #bfd6ff;
+  --ebony-300: #99bbff;
+  --ebony-400: #7194ff;
+  --ebony-500: #4f6dff;
+  --ebony-600: #3042fb;
+  --ebony-700: #2431de;
+  --ebony-800: #202cb3;
+  --ebony-900: #101225;
+  --ebony-950: #080a20;
+
+
 }
 
 .container {
-  background-color: var(--royal-blue-200);
+  background-color: var(--ebony-900);
   height: 40rem;
   width: 30rem;
   padding: .1rem;
