@@ -19,7 +19,7 @@ export const ChatContainer = ({ handleCloseChat, usersChatInfo }: Props) => {
   }, [])
 
   return (
-    <div>
+    <>
       {Object.entries(usersChatInfo).map(userChatInfo => {
         return (
           <ChatItem
@@ -29,6 +29,6 @@ export const ChatContainer = ({ handleCloseChat, usersChatInfo }: Props) => {
           />
         )
       })}
-    </div>
+    </>
   )
 }

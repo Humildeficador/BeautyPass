@@ -61,8 +61,8 @@ export const ChatItem = ({ handleCloseChat, userChatInfo }: Props) => {
   }
 
   const handleSendMessage = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) e.preventDefault()
     if (e.key !== 'Enter' || message.trim() === '' || (e.key === 'Enter' && e.shiftKey)) return
-    console.log(e)
     sendMessage(userChatInfo[0], message)
     // if (messageConversation) sendMessage(messageConversation.id, message)
     setMessage('')

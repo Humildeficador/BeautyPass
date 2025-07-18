@@ -1,14 +1,14 @@
 .container {
-  display: grid;
-  grid-template-columns: 1fr;
-  margin-top: 1rem;
   width: 100%;
+  height: 700px;
+  margin-top: 1rem;
 }
 
 .header {
-  height: 5rem;
   display: flex;
   padding: 1rem;
+  min-height: 5rem;
+  max-height: 6rem;
   overflow: hidden;
   align-items: center;
   border-top-left-radius: 8px;
@@ -20,24 +20,24 @@
 }
 
 .userCard {
-  gap: 1rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
   flex: 1;
+  gap: 1rem;
+  display: flex;
+  font-weight: 500;
+  align-items: center;
 
   .userAvatar {
     width: 2.75rem;
-    border: 2px solid #353535;
     border-radius: 100%;
+    border: 2px solid #353535;
   }
 }
 
 .closeButton {
   border: none;
-  padding: .25rem;
   outline: none;
   display: flex;
+  padding: .25rem;
   border-radius: 8px;
   align-items: center;
   justify-content: center;
@@ -57,14 +57,17 @@
 }
 
 .textBox {
+  gap: 1rem;
   width: 100%;
+  display: flex;
+  min-height: 6rem;
+  height: 6.375rem;
+  max-height: 7rem;
+  align-items: flex-end;
+  padding: .5rem 1rem;
   background-color: #080a20;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
-  padding: .5rem 1rem;
-  display: flex;
-  align-items: end;
-  gap: 1rem;
 
   .text {
     width: 100%;
@@ -73,6 +76,7 @@
     outline: none;
     color: white;
     transition: .3s;
+    min-height: 100%;
     border-radius: 4px;
     background-color: transparent;
     padding: .5rem 1rem .5rem 1rem;
@@ -87,8 +91,8 @@
 
     /* Hidden scroll-bar */
     & {
-      -ms-overflow-style: none;
       scrollbar-width: none;
+      -ms-overflow-style: none;
 
       &::-webkit-scrollbar {
         display: none;
@@ -97,15 +101,15 @@
   }
 
   .sendButton {
+    width: 2.5rem;
+    display: flex;
+    height: 2.5rem;
     transition: .3s;
     cursor: pointer;
     border-radius: 4px;
-    background-color: transparent;
-    width: 2.5rem;
-    height: 2.5rem;
-    display: flex;
     align-items: center;
     justify-content: center;
+    background-color: transparent;
 
     &:hover {
       background-color: rgba(184, 184, 184, 0.096);
